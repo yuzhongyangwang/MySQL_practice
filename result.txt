@@ -1,0 +1,40 @@
+pactice1_result：
+mysql> select * from Employee where name like "%n%" and salary > 6000;
++----+------------+------+----------+-----------+--------+
+| id | name       | age  | gender   | companyId | salary |
++----+------------+------+----------+-----------+--------+
+|  1 | 'xiaohong' |   19 | 'female' |         1 | 7000   |
++----+------------+------+----------+-----------+--------+
+1 row in set (0.00 sec)
+
+pactice2_result：
+mysql> select a.companyName,b.name from Company a,(select a.* from Employee as a where salary = (select max(salary) from Employee where a.companyId = companyId)) b where a.id = b.companyId;
++-------------+------------+
+| companyName | name       |
++-------------+------------+
+| 'baidu'     | 'xiaoming' |
+| 'alibaba'   | 'xiaohong' |
+| 'tengxun'   | 'xiaozhi'  |
++-------------+------------+
+3 rows in set (0.00 sec)
+
+pactice3_result：
+mysql> select a.companyName,b.avgsalary from Company a,(select companyId,avg(salary) avgsalary from Employee group by companyId) b where a.id = b.companyId;
++-------------+-----------+
+| companyName | avgsalary |
++-------------+-----------+
+| 'baidu'     |      5000 |
+| 'alibaba'   |      6500 |
+| 'tengxun'   |      8000 |
++-------------+-----------+
+3 rows in set (0.00 sec)
+
+pactice4_result：
+mysql> select a.*,b.companyName,c.avgsal from Employee a,Company b,(select companyId,avg(salary) avgsal from Employee group by companyId) c where a.salary > c.avgsal and a.companyId = c.companyId and b.id = c.companyId;
++----+------------+------+----------+-----------+--------+-------------+--------+
+| id | name       | age  | gender   | companyId | salary | companyName | avgsal |
++----+------------+------+----------+-----------+--------+-------------+--------+
+|  0 | 'xiaoming' |   20 | 'male'   |         0 | 6000   | 'baidu'     |   5000 |
+|  1 | 'xiaohong' |   19 | 'female' |         1 | 7000   | 'alibaba'   |   6500 |
++----+------------+------+----------+-----------+--------+-------------+--------+
+2 rows in set (0.00 sec)
